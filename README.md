@@ -1,86 +1,68 @@
-# TradeSavvy Sandbox Starter
+﻿# TradeSavvy Sandbox Starter
 
-Учебный репозиторий для запуска торгового бота в Sandbox T-Invest.
+A minimal training repository for running the bot in T-Invest Sandbox.
 
-## Что внутри
+## Quick Start (Windows PowerShell)
 
-- Готовая стратегия `scalpel` (EMA 20/50 + Bollinger).
-- Автоматический quickstart-скрипт для Windows.
-- Визуализация и бэктест: `tools/plot_scalpel_report.py`.
-
-## Быстрый старт (Windows PowerShell)
-
-1. Клонируй репозиторий:
+1. Clone repository:
 
 ```powershell
-git clone <YOUR_GIT_URL>
-cd .\TradeSavvyGitReady
+git clone https://github.com/DmitriiOrel/winter_school_project.git
+cd .\winter_school_project
 ```
 
-2. Выполни one-shot установку (создаст `.venv`, установит зависимости, откроет/найдет sandbox-аккаунт и запишет `.env`):
+2. Run one-shot setup (creates `.venv`, installs deps, creates/finds sandbox account, writes `.env`):
 
 ```powershell
 .\quickstart.ps1 -Token "t.<YOUR_API_TOKEN>"
 ```
 
-3. Запусти бота:
+3. Run bot:
 
 ```powershell
 .\run_sandbox.ps1
 ```
 
-Остановка: `Ctrl+C`.
+Stop with `Ctrl+C`.
 
-## Что нужно заполнить руками
+## What You Fill Manually
 
-Ничего, кроме `TOKEN` (в параметре `-Token`).
+Only API token in `quickstart.ps1 -Token ...`.
 
-`ACCOUNT_ID` заполняется автоматически в `.env`.
+`ACCOUNT_ID` is written automatically to `.env`.
 
-## Основные файлы
+## Core Files
 
-- `app/main.py` — запуск бота.
-- `instruments_config_scalpel.json` — инструмент и параметры стратегии.
-- `tools/get_accounts.py` — проверка sandbox-аккаунтов.
-- `tools/get_figi.py` — поиск FIGI по тикеру.
-- `tools/plot_scalpel_report.py` — отчеты и графики.
+- `app/main.py` - bot entrypoint.
+- `instruments_config_scalpel.json` - traded instrument and strategy params.
+- `tools/get_accounts.py` - sandbox accounts helper.
+- `tools/get_figi.py` - FIGI by ticker.
+- `tools/plot_scalpel_report.py` - backtest and charts.
 
-## Параметры стратегии
+## Strategy Params
 
-Файл: `instruments_config_scalpel.json`
+In `instruments_config_scalpel.json`:
 
 - `days_back_to_consider`
 - `quantity_limit`
 - `check_data`
 
-Текущая логика EMA зафиксирована в коде:
+EMA logic in code (`app/strategies/scalpel/scalpel.py`):
 
 - `EMA_fast = 20`
 - `EMA_slow = 50`
 
-Файл: `app/strategies/scalpel/scalpel.py`
-
-## Бэктест и графики
-
-Пример отчета за 2 года:
+## Backtest Example
 
 ```powershell
 .\.venv\Scripts\python.exe .\tools\plot_scalpel_report.py --source api --days-back 730 --interval 5min
 ```
 
-## Публикация на GitHub
+## Publish Notes
 
-```powershell
-git init
-git add .
-git commit -m "Initial sandbox starter"
-git branch -M main
-git remote add origin <YOUR_GITHUB_REPO_URL>
-git push -u origin main
-```
+- Do not commit `.env`.
+- Do not commit `stats.db`, `market_data_cache`, `reports`.
 
-## Важно
+## Disclaimer
 
-- Этот проект только для учебных целей.
-- Перед переходом в реальный счет проверь риски и лимиты.
-- Не публикуй `TOKEN` и файл `.env`.
+Training project only. Test in sandbox before any real account use.
