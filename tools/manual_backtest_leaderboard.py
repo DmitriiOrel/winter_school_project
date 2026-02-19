@@ -68,6 +68,8 @@ LEADERBOARD_COLUMNS = [
     "timestamp_utc",
     "run_id",
 ]
+README_LB_START = "<!-- LEADERBOARD:START -->"
+README_LB_END = "<!-- LEADERBOARD:END -->"
 
 
 @dataclass
@@ -100,10 +102,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--github-owner", default="")
     parser.add_argument("--github-repo", default="")
     parser.add_argument("--github-path", default="reports/leaderboard.csv")
+    parser.add_argument("--github-readme-path", default="README.md")
     parser.add_argument("--github-branch", default="main")
     parser.add_argument("--github-token", default="")
     parser.add_argument("--require-github", action="store_true")
     parser.add_argument("--table-limit", type=int, default=20)
+    parser.add_argument("--readme-table-limit", type=int, default=10)
     return parser.parse_args()
 
 
@@ -428,7 +432,7 @@ def save_local_leaderboard(df: pd.DataFrame, path: Path) -> None:
     df.to_csv(path, index=False)
 
 
-def fetch_remote_leaderboard(owner: str, repo: str, path: str, branch: str, token: str) -> tuple[pd.DataFrame, Optional[str]]:
+def fetch_remote_text_file(owner: str, repo: str, path: str, branch: str, token: str) -> tuple[str, Optional[str]]:
     url = f"https://api.github.com/repos/{owner}/{repo}/contents/{quote(path)}?ref={quote(branch)}"
     headers = {
         "Accept": "application/vnd.github+json",
@@ -442,22 +446,35 @@ def fetch_remote_leaderboard(owner: str, repo: str, path: str, branch: str, toke
             payload = json.loads(resp.read().decode("utf-8"))
     except HTTPError as e:
         if e.code == 404:
-            return empty_leaderboard(), None
+            return "", None
         raise
     content = payload.get("content", "")
     sha = payload.get("sha")
     decoded = base64.b64decode(content).decode("utf-8") if content else ""
+    return decoded, sha
+
+
+def fetch_remote_leaderboard(owner: str, repo: str, path: str, branch: str, token: str) -> tuple[pd.DataFrame, Optional[str]]:
+    decoded, sha = fetch_remote_text_file(owner=owner, repo=repo, path=path, branch=branch, token=token)
     if not decoded.strip():
         return empty_leaderboard(), sha
     return pd.read_csv(io.StringIO(decoded)), sha
 
 
-def push_remote_leaderboard(owner: str, repo: str, path: str, branch: str, token: str, df: pd.DataFrame, sha: Optional[str], message: str) -> None:
+def push_remote_text_file(
+    owner: str,
+    repo: str,
+    path: str,
+    branch: str,
+    token: str,
+    text: str,
+    sha: Optional[str],
+    message: str,
+) -> None:
     url = f"https://api.github.com/repos/{owner}/{repo}/contents/{quote(path)}"
-    csv_text = df.to_csv(index=False)
     body = {
         "message": message,
-        "content": base64.b64encode(csv_text.encode("utf-8")).decode("utf-8"),
+        "content": base64.b64encode(text.encode("utf-8")).decode("utf-8"),
         "branch": branch,
     }
     if sha:
@@ -472,6 +489,79 @@ def push_remote_leaderboard(owner: str, repo: str, path: str, branch: str, token
     req = Request(url, data=json.dumps(body).encode("utf-8"), headers=headers, method="PUT")
     with urlopen(req, timeout=30):
         pass
+
+
+def push_remote_leaderboard(owner: str, repo: str, path: str, branch: str, token: str, df: pd.DataFrame, sha: Optional[str], message: str) -> None:
+    push_remote_text_file(
+        owner=owner,
+        repo=repo,
+        path=path,
+        branch=branch,
+        token=token,
+        text=df.to_csv(index=False),
+        sha=sha,
+        message=message,
+    )
+
+
+def _md_cell(value: object) -> str:
+    return str(value).replace("|", "\\|").replace("\n", " ").strip()
+
+
+def render_readme_leaderboard(df: pd.DataFrame, table_limit: int, generated_utc: str) -> str:
+    cols = ["place", "name", "annual_return_pct", "max_drawdown_pct", "trades", "ema_fast", "ema_slow", "bb_window", "bb_dev", "timeframe_min"]
+    top = df[cols].head(table_limit).copy()
+    top["annual_return_pct"] = top["annual_return_pct"].map(lambda x: f"{float(x):.2f}")
+    top["max_drawdown_pct"] = top["max_drawdown_pct"].map(lambda x: f"{float(x):.2f}")
+    top["trades"] = top["trades"].map(lambda x: f"{int(x)}")
+    lines = [
+        README_LB_START,
+        "## Live Leaderboard",
+        "",
+        f"Auto-updated by backtest script. Last update: `{generated_utc}` UTC.",
+        "",
+        "| Place | Name | CAGR % | Max DD % | Trades | EMA Fast | EMA Slow | BB Window | BB Dev | TF (min) |",
+        "|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|",
+    ]
+    if top.empty:
+        lines.append("| - | - | - | - | - | - | - | - | - | - |")
+    else:
+        for _, row in top.iterrows():
+            lines.append(
+                "| "
+                + " | ".join(
+                    [
+                        _md_cell(row["place"]),
+                        _md_cell(row["name"]),
+                        _md_cell(row["annual_return_pct"]),
+                        _md_cell(row["max_drawdown_pct"]),
+                        _md_cell(row["trades"]),
+                        _md_cell(row["ema_fast"]),
+                        _md_cell(row["ema_slow"]),
+                        _md_cell(row["bb_window"]),
+                        _md_cell(row["bb_dev"]),
+                        _md_cell(row["timeframe_min"]),
+                    ]
+                )
+                + " |"
+            )
+    lines.append("")
+    lines.append(README_LB_END)
+    return "\n".join(lines)
+
+
+def inject_readme_leaderboard(readme_text: str, leaderboard_block: str) -> str:
+    pattern = re.compile(rf"{re.escape(README_LB_START)}.*?{re.escape(README_LB_END)}", flags=re.S)
+    matches = list(pattern.finditer(readme_text))
+    if matches:
+        first = matches[0]
+        prefix = readme_text[: first.start()]
+        suffix = readme_text[first.end() :]
+        suffix_without_duplicates = pattern.sub("", suffix)
+        return f"{prefix}{leaderboard_block}{suffix_without_duplicates}"
+
+    suffix = "" if readme_text.endswith("\n") else "\n"
+    return f"{readme_text}{suffix}\n{leaderboard_block}\n"
 
 
 def print_leaderboard(df: pd.DataFrame, table_limit: int) -> None:
@@ -596,6 +686,31 @@ def main() -> None:
             sha=remote_sha,
             message=f"Update leaderboard: {safe_name} {run_id}",
         )
+
+        readme_text, readme_sha = fetch_remote_text_file(
+            owner=args.github_owner,
+            repo=args.github_repo,
+            path=args.github_readme_path,
+            branch=args.github_branch,
+            token=args.github_token,
+        )
+        leaderboard_block = render_readme_leaderboard(
+            df=ranked,
+            table_limit=args.readme_table_limit,
+            generated_utc=run_id,
+        )
+        updated_readme = inject_readme_leaderboard(readme_text=readme_text, leaderboard_block=leaderboard_block)
+        if updated_readme != readme_text:
+            push_remote_text_file(
+                owner=args.github_owner,
+                repo=args.github_repo,
+                path=args.github_readme_path,
+                branch=args.github_branch,
+                token=args.github_token,
+                text=updated_readme,
+                sha=readme_sha,
+                message=f"Update README leaderboard: {safe_name} {run_id}",
+            )
     except Exception as ex:
         raise RuntimeError(f"GitHub leaderboard update failed: {ex}") from ex
 
@@ -619,6 +734,7 @@ def main() -> None:
     print(f"Your leaderboard place: {my_place}")
     print(f"Latest plot: {latest_plot}")
     print(f"Leaderboard file: {args.leaderboard_path}")
+    print(f"README leaderboard path: {args.github_readme_path}")
     print("Published to GitHub: yes")
 
     print_leaderboard(ranked, args.table_limit)

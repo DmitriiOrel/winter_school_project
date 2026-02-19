@@ -2,6 +2,19 @@
 
 Minimal training project to run a trading bot in T-Invest Sandbox.
 
+<!-- LEADERBOARD:START -->
+## Live Leaderboard
+
+Auto-updated by backtest script. Last update: `20260219T093849Z` UTC.
+
+| Place | Name | CAGR % | Max DD % | Trades | EMA Fast | EMA Slow | BB Window | BB Dev | TF (min) |
+|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| 1 | DmitriiOrel | 8.34 | -12.17 | 65 | 20 | 50 | 20 | 2.0 | 60 |
+| 2 | DmitriiOrel | 8.33 | -12.17 | 65 | 20 | 50 | 20 | 2.0 | 60 |
+| 3 | smoke | -6.12 | -8.61 | 4 | 20 | 50 | 20 | 2.0 | 240 |
+
+<!-- LEADERBOARD:END -->
+
 ## Quick Start (Windows PowerShell)
 
 ```powershell
@@ -56,6 +69,7 @@ The script:
 - shows entry/exit points on chart;
 - prints your leaderboard place in terminal;
 - updates leaderboard on GitHub (required);
+- updates leaderboard section in `README.md` on GitHub;
 - writes selected EMA params into `instruments_config_scalpel.json`;
 - starts sandbox bot.
 
@@ -78,16 +92,3 @@ powershell -ExecutionPolicy Bypass -File .\quickstart.ps1 -Token "t.YOUR_API_TOK
 
 - Sandbox only (`SANDBOX=True`): virtual trades.
 - Do not commit `.env`, `stats.db`, `market_data_cache`, `reports`.
-
-<!-- LEADERBOARD:START -->
-## Live Leaderboard
-
-Auto-updated by backtest script. Last update: `20260219T093849Z` UTC.
-
-| Place | Name | CAGR % | Max DD % | Trades | EMA Fast | EMA Slow | BB Window | BB Dev | TF (min) |
-|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| 1 | DmitriiOrel | 8.34 | -12.17 | 65 | 20 | 50 | 20 | 2.0 | 60 |
-| 2 | DmitriiOrel | 8.33 | -12.17 | 65 | 20 | 50 | 20 | 2.0 | 60 |
-| 3 | smoke | -6.12 | -8.61 | 4 | 20 | 50 | 20 | 2.0 | 240 |
-
-<!-- LEADERBOARD:END -->
