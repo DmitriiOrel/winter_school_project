@@ -78,3 +78,15 @@ powershell -ExecutionPolicy Bypass -File .\quickstart.ps1 -Token "t.YOUR_API_TOK
 
 - Sandbox only (`SANDBOX=True`): virtual trades.
 - Do not commit `.env`, `stats.db`, `market_data_cache`, `reports`.
+
+<!-- LEADERBOARD:START -->
+## Live Leaderboard
+
+Auto-updated by backtest script. Last update: `20260219T093608Z` UTC.
+
+| Place | Name | CAGR % | Max DD % | Trades | EMA Fast | EMA Slow | BB Window | BB Dev | TF (min) |
+|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| 1 | DmitriiOrel | 8.34 | -12.17 | 65 | 20 | 50 | 20 | 2.0 | 60 |
+| 2 | DmitriiOrel | 8.33 | -12.17 | 65 | 20 | 50 | 20 | 2.0 | 60 |
+
+<!-- LEADERBOARD:END -->
