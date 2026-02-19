@@ -1,0 +1,2 @@
+place,name,annual_return_pct,ema_fast,ema_slow,bb_window,bb_dev,timeframe_min,max_drawdown_pct,trades,total_return_pct,days_back,figi,timestamp_utc,run_id
+1,DmitriiOrel,8.33792775633302,20,50,20,2.0,60,-12.174109617928508,65,27.136471806248984,1095,BBG004730N88,20260219T092944Z,20260219T092944Z
