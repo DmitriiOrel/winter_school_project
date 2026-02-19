@@ -3,15 +3,16 @@
 Minimal training project to run a trading bot in T-Invest Sandbox.
 
 <!-- LEADERBOARD:START -->
-## Live Leaderboard
+## Актуальный Лидерборд
 
-Auto-updated by backtest script. Last update: `20260219T100204Z` UTC.
+Автоматически обновляется после каждого бэктеста. Последнее обновление: `20260219T102325Z` UTC.
 
-| Place | Name | CAGR % | Max DD % | Trades | EMA Fast | EMA Slow | BB Window | BB Dev | TF (min) |
+| Место | Участник | CAGR % | Макс. просадка % | Сделки | EMA Fast | EMA Slow | BB Window | BB Dev | ТФ (мин) |
 |---:|---|---:|---:|---:|---:|---:|---:|---:|---:|
 | 1 | DmitriiOrel | 8.34 | -12.17 | 65 | 20 | 50 | 20 | 2.0 | 60 |
-| 2 | smoke2 | -6.12 | -8.61 | 4 | 21 | 55 | 20 | 2.0 | 240 |
-| 3 | smoke | -6.12 | -8.61 | 4 | 20 | 50 | 20 | 2.0 | 240 |
+| 2 | smoke_ru | -0.80 | -2.56 | 1 | 20 | 50 | 20 | 2.0 | 240 |
+| 3 | smoke2 | -6.12 | -8.61 | 4 | 21 | 55 | 20 | 2.0 | 240 |
+| 4 | smoke | -6.12 | -8.61 | 4 | 20 | 50 | 20 | 2.0 | 240 |
 
 <!-- LEADERBOARD:END -->
 
