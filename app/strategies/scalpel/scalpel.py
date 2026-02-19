@@ -5,6 +5,7 @@ from datetime import timedelta
 from typing import Optional
 from uuid import uuid4
 
+import pandas as pd
 from pandas import DataFrame
 from ta.momentum import RSIIndicator
 from ta.trend import EMAIndicator
@@ -29,27 +30,76 @@ from app.utils.quotation import quotation_to_float
 
 logger = logging.getLogger(__name__)
 
+ALLOWED_TIMEFRAMES = {5, 15, 30, 60, 120, 240, 720, 1440}
+BASE_TIMEFRAME_MAP = {
+    5: 5,
+    15: 15,
+    30: 30,
+    60: 60,
+    120: 120,
+    240: 240,
+    720: 240,
+    1440: 1440,
+}
+INTERVAL_BY_BASE_TIMEFRAME = {
+    5: CandleInterval.CANDLE_INTERVAL_5_MIN,
+    15: CandleInterval.CANDLE_INTERVAL_15_MIN,
+    30: CandleInterval.CANDLE_INTERVAL_30_MIN,
+    60: CandleInterval.CANDLE_INTERVAL_HOUR,
+    120: CandleInterval.CANDLE_INTERVAL_2_HOUR,
+    240: CandleInterval.CANDLE_INTERVAL_4_HOUR,
+    1440: CandleInterval.CANDLE_INTERVAL_DAY,
+}
+
 
 class ScalpelStrategy(BaseStrategy):
-    def __init__(self, figi: str = None, backcandles: int = 15, *args, **kwargs):
+    def __init__(self, figi: str = None, *args, **kwargs):
         self.account_id = settings.account_id
         self.figi = figi
         self.stats_handler = StatsHandler(StrategyName.SCALPEL, client)
         self.config: ScalpelStrategyConfig = ScalpelStrategyConfig(**kwargs)
-        self.backcandles = backcandles
         self.instrument_info: Optional[Instrument, None] = None
+
+    def _base_timeframe_min(self) -> int:
+        return BASE_TIMEFRAME_MAP[self.config.timeframe_min]
+
+    def _candle_interval(self) -> CandleInterval:
+        return INTERVAL_BY_BASE_TIMEFRAME[self._base_timeframe_min()]
+
+    @staticmethod
+    def _resample_ohlcv(df: DataFrame, timeframe_min: int) -> DataFrame:
+        out = df.copy()
+        out["Time"] = pd.to_datetime(out["Time"], utc=True, errors="coerce")
+        out = out.dropna(subset=["Time"]).sort_values("Time")
+        out = out.set_index("Time")
+        agg = (
+            out.resample(f"{timeframe_min}min", label="right", closed="right")
+            .agg(
+                {
+                    "Open": "first",
+                    "High": "max",
+                    "Low": "min",
+                    "Close": "last",
+                    "Volume": "sum",
+                }
+            )
+            .dropna()
+            .reset_index()
+        )
+        return agg
 
     async def get_historical_data(self):
         candles = []
+        base_tf = self._base_timeframe_min()
         logger.info(
             f"Start getting historical data for {self.config.days_back_to_consider} days back from now. "
-            f"figi={self.figi}"
+            f"figi={self.figi}, timeframe={self.config.timeframe_min}m (base={base_tf}m)"
         )
         async for candle in client.get_all_candles(
             figi=self.figi,
             from_=now() - timedelta(days=self.config.days_back_to_consider),
             to=now(),
-            interval=CandleInterval.CANDLE_INTERVAL_5_MIN,
+            interval=self._candle_interval(),
         ):
             candles.append(candle)
         logger.info(f"Found {len(candles)} candles. figi={self.figi}")
@@ -74,12 +124,20 @@ class ScalpelStrategy(BaseStrategy):
             ]
         )
         df = df[df.High != df.Low]
+        df["Time"] = pd.to_datetime(df["Time"], utc=True, errors="coerce")
+        df = df.dropna(subset=["Time"]).sort_values("Time")
+        if self.config.timeframe_min != self._base_timeframe_min():
+            df = self._resample_ohlcv(df, self.config.timeframe_min)
         logger.info(f"DataFrame created for {self.figi}")
         return df
 
     async def add_indicators(self):
         df = await self.create_df()
-        bbands = BollingerBands(close=df["Close"], window=14, window_dev=2)
+        bbands = BollingerBands(
+            close=df["Close"],
+            window=self.config.bb_window,
+            window_dev=self.config.bb_dev,
+        )
         df = df.join(
             [
                 bbands.bollinger_hband_indicator(),
@@ -112,13 +170,13 @@ class ScalpelStrategy(BaseStrategy):
         above = df["EMA_fast"] > df["EMA_slow"]
         below = df["EMA_fast"] < df["EMA_slow"]
         above_all = (
-            above.rolling(window=self.backcandles)
+            above.rolling(window=self.config.backcandles)
             .apply(lambda x: x.all(), raw=True)
             .fillna(0)
             .astype(bool)
         )
         below_all = (
-            below.rolling(window=self.backcandles)
+            below.rolling(window=self.config.backcandles)
             .apply(lambda x: x.all(), raw=True)
             .fillna(0)
             .astype(bool)
@@ -264,6 +322,11 @@ class ScalpelStrategy(BaseStrategy):
         if self.config.ema_fast_window >= self.config.ema_slow_window:
             raise ValueError(
                 "Invalid EMA configuration: ema_fast_window must be less than ema_slow_window"
+            )
+        if self.config.timeframe_min not in ALLOWED_TIMEFRAMES:
+            raise ValueError(
+                f"Invalid timeframe_min={self.config.timeframe_min}. "
+                f"Allowed values: {sorted(ALLOWED_TIMEFRAMES)}"
             )
         await self.prepare_data()
         logger.info(

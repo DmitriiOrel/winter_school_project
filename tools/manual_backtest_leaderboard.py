@@ -387,11 +387,23 @@ def build_plot(result: BacktestResult, figi: str, params_text: str, output_path:
     plt.close(fig)
 
 
-def update_live_config(config_path: Path, ema_fast: int, ema_slow: int) -> None:
+def update_live_config(
+    config_path: Path,
+    ema_fast: int,
+    ema_slow: int,
+    bb_window: int,
+    bb_dev: float,
+    timeframe_min: int,
+    backcandles: int,
+) -> None:
     payload = json.loads(config_path.read_text(encoding="utf-8"))
     params = payload["instruments"][0]["strategy"]["parameters"]
     params["ema_fast_window"] = ema_fast
     params["ema_slow_window"] = ema_slow
+    params["bb_window"] = bb_window
+    params["bb_dev"] = bb_dev
+    params["timeframe_min"] = timeframe_min
+    params["backcandles"] = backcandles
     config_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
@@ -978,7 +990,15 @@ def main() -> None:
     my_place = int(my_row.iloc[0]["place"]) if not my_row.empty else -1
 
     if args.write_live_config:
-        update_live_config(args.config_path, args.ema_fast, args.ema_slow)
+        update_live_config(
+            config_path=args.config_path,
+            ema_fast=args.ema_fast,
+            ema_slow=args.ema_slow,
+            bb_window=args.bb_window,
+            bb_dev=args.bb_dev,
+            timeframe_min=args.timeframe_min,
+            backcandles=args.backcandles,
+        )
 
     print("\n=== Сводка Бэктеста ===")
     print(f"Участник: {safe_name}")
