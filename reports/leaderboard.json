@@ -36,19 +36,19 @@
   {
     "place": 3,
     "name": "dstarky",
-    "annual_return_pct": 20.870536060371613,
+    "annual_return_pct": 21.944237309060988,
     "ema_fast": 30,
-    "ema_slow": 35,
-    "bb_window": 15,
+    "ema_slow": 40,
+    "bb_window": 20,
     "bb_dev": 1.0,
-    "timeframe_min": 60,
-    "max_drawdown_pct": -23.710415209080914,
-    "trades": 90,
-    "total_return_pct": 76.51934561988953,
+    "timeframe_min": 30,
+    "max_drawdown_pct": -18.11618182399132,
+    "trades": 177,
+    "total_return_pct": 81.26206477935425,
     "days_back": 1095,
     "figi": "BBG004730N88",
-    "timestamp_utc": "20260220T164020Z",
-    "run_id": "20260220T164020Z"
+    "timestamp_utc": "20260220T164236Z",
+    "run_id": "20260220T164236Z"
   },
   {
     "place": 4,
