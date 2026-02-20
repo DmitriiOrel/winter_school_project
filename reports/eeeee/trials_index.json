@@ -40,5 +40,19 @@
     "bb_dev": 1.0,
     "timeframe_min": 120,
     "timestamp_utc": "20260220T164944Z"
+  },
+  {
+    "run_id": "20260220T165033Z",
+    "trial_path": "reports/eeeee/trial_20260220T165033Z",
+    "annual_return_pct": 6.221890096237037,
+    "max_drawdown_pct": -26.675288187747505,
+    "total_return_pct": 19.836260176266695,
+    "trades": 36,
+    "ema_fast": 30,
+    "ema_slow": 40,
+    "bb_window": 40,
+    "bb_dev": 1.0,
+    "timeframe_min": 120,
+    "timestamp_utc": "20260220T165033Z"
   }
 ]
