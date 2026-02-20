@@ -1,0 +1,27 @@
+{
+  "run_id": "20260220T164003Z",
+  "name": "viktor",
+  "figi": "BBG004730N88",
+  "days_back": 1095,
+  "timeframe_min": 240,
+  "ema_fast": 25,
+  "ema_slow": 35,
+  "bb_window": 15,
+  "bb_dev": 1.0,
+  "annual_return_pct": 13.08223775782209,
+  "total_return_pct": 44.56845599836756,
+  "max_drawdown_pct": -16.748496195103858,
+  "trades": 26,
+  "win_rate_pct": 53.84615384615385,
+  "strategy_params": {
+    "ema_fast": 25,
+    "ema_slow": 35,
+    "bb_window": 15,
+    "bb_dev": 1.0,
+    "timeframe_min": 240,
+    "backcandles": 15
+  },
+  "trial_dir": "reports\\viktor\\trial_20260220T164003Z",
+  "plot_png": "reports\\viktor\\trial_20260220T164003Z\\backtest.png",
+  "trades_csv": "reports\\viktor\\trial_20260220T164003Z\\trades.csv"
+}
