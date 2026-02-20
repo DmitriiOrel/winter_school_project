@@ -49,5 +49,22 @@
     "figi": "BBG004730N88",
     "timestamp_utc": "20260220T163814Z",
     "run_id": "20260220T163814Z"
+  },
+  {
+    "place": 4,
+    "name": "gav",
+    "annual_return_pct": 6.939138655748667,
+    "ema_fast": 20,
+    "ema_slow": 50,
+    "bb_window": 20,
+    "bb_dev": 1.0,
+    "timeframe_min": 240,
+    "max_drawdown_pct": -19.43057984302262,
+    "trades": 22,
+    "total_return_pct": 22.278532026258134,
+    "days_back": 1095,
+    "figi": "BBG004730N88",
+    "timestamp_utc": "20260220T163915Z",
+    "run_id": "20260220T163915Z"
   }
 ]
