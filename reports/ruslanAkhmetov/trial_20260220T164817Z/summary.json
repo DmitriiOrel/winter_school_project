@@ -1,0 +1,27 @@
+{
+  "run_id": "20260220T164817Z",
+  "name": "ruslanAkhmetov",
+  "figi": "BBG004730N88",
+  "days_back": 1095,
+  "timeframe_min": 60,
+  "ema_fast": 30,
+  "ema_slow": 45,
+  "bb_window": 20,
+  "bb_dev": 1.0,
+  "annual_return_pct": 36.99572923353662,
+  "total_return_pct": 156.94511942681427,
+  "max_drawdown_pct": -11.283549111707247,
+  "trades": 79,
+  "win_rate_pct": 53.16455696202531,
+  "strategy_params": {
+    "ema_fast": 30,
+    "ema_slow": 45,
+    "bb_window": 20,
+    "bb_dev": 1.0,
+    "timeframe_min": 60,
+    "backcandles": 15
+  },
+  "trial_dir": "reports\\ruslanAkhmetov\\trial_20260220T164817Z",
+  "plot_png": "reports\\ruslanAkhmetov\\trial_20260220T164817Z\\backtest.png",
+  "trades_csv": "reports\\ruslanAkhmetov\\trial_20260220T164817Z\\trades.csv"
+}
