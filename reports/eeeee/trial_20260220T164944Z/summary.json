@@ -1,0 +1,27 @@
+{
+  "run_id": "20260220T164944Z",
+  "name": "eeeee",
+  "figi": "BBG004730N88",
+  "days_back": 1095,
+  "timeframe_min": 120,
+  "ema_fast": 30,
+  "ema_slow": 40,
+  "bb_window": 20,
+  "bb_dev": 1.0,
+  "annual_return_pct": 6.409682285487706,
+  "total_return_pct": 20.472531611852407,
+  "max_drawdown_pct": -24.197314416094006,
+  "trades": 42,
+  "win_rate_pct": 45.23809523809524,
+  "strategy_params": {
+    "ema_fast": 30,
+    "ema_slow": 40,
+    "bb_window": 20,
+    "bb_dev": 1.0,
+    "timeframe_min": 120,
+    "backcandles": 15
+  },
+  "trial_dir": "reports\\eeeee\\trial_20260220T164944Z",
+  "plot_png": "reports\\eeeee\\trial_20260220T164944Z\\backtest.png",
+  "trades_csv": "reports\\eeeee\\trial_20260220T164944Z\\trades.csv"
+}
