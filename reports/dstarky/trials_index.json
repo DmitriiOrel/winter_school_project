@@ -1,5 +1,19 @@
 [
   {
+    "run_id": "20260220T164236Z",
+    "trial_path": "reports/dstarky/trial_20260220T164236Z",
+    "annual_return_pct": 21.944237309060988,
+    "max_drawdown_pct": -18.11618182399132,
+    "total_return_pct": 81.26206477935425,
+    "trades": 177,
+    "ema_fast": 30,
+    "ema_slow": 40,
+    "bb_window": 20,
+    "bb_dev": 1.0,
+    "timeframe_min": 30,
+    "timestamp_utc": "20260220T164236Z"
+  },
+  {
     "run_id": "20260220T164020Z",
     "trial_path": "reports/dstarky/trial_20260220T164020Z",
     "annual_return_pct": 20.870536060371613,
