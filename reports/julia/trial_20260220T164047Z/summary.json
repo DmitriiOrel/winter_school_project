@@ -1,0 +1,27 @@
+{
+  "run_id": "20260220T164047Z",
+  "name": "julia",
+  "figi": "BBG004730N88",
+  "days_back": 1095,
+  "timeframe_min": 240,
+  "ema_fast": 29,
+  "ema_slow": 39,
+  "bb_window": 20,
+  "bb_dev": 1.0,
+  "annual_return_pct": 14.327121814440513,
+  "total_return_pct": 49.39236679901955,
+  "max_drawdown_pct": -19.430579843022677,
+  "trades": 23,
+  "win_rate_pct": 56.52173913043478,
+  "strategy_params": {
+    "ema_fast": 29,
+    "ema_slow": 39,
+    "bb_window": 20,
+    "bb_dev": 1.0,
+    "timeframe_min": 240,
+    "backcandles": 15
+  },
+  "trial_dir": "reports\\julia\\trial_20260220T164047Z",
+  "plot_png": "reports\\julia\\trial_20260220T164047Z\\backtest.png",
+  "trades_csv": "reports\\julia\\trial_20260220T164047Z\\trades.csv"
+}
