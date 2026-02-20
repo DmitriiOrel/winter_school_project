@@ -1,0 +1,27 @@
+{
+  "run_id": "20260220T164719Z",
+  "name": "gav",
+  "figi": "BBG004730N88",
+  "days_back": 1095,
+  "timeframe_min": 60,
+  "ema_fast": 29,
+  "ema_slow": 40,
+  "bb_window": 20,
+  "bb_dev": 1.0,
+  "annual_return_pct": 38.01442884178607,
+  "total_return_pct": 162.71577922748602,
+  "max_drawdown_pct": -11.975553401149652,
+  "trades": 80,
+  "win_rate_pct": 52.5,
+  "strategy_params": {
+    "ema_fast": 29,
+    "ema_slow": 40,
+    "bb_window": 20,
+    "bb_dev": 1.0,
+    "timeframe_min": 60,
+    "backcandles": 15
+  },
+  "trial_dir": "reports\\gav\\trial_20260220T164719Z",
+  "plot_png": "reports\\gav\\trial_20260220T164719Z\\backtest.png",
+  "trades_csv": "reports\\gav\\trial_20260220T164719Z\\trades.csv"
+}
