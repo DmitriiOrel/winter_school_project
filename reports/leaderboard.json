@@ -19,19 +19,19 @@
   {
     "place": 2,
     "name": "julia",
-    "annual_return_pct": 25.459767332286365,
+    "annual_return_pct": 27.747665199468695,
     "ema_fast": 30,
-    "ema_slow": 60,
+    "ema_slow": 35,
     "bb_window": 30,
     "bb_dev": 1.0,
     "timeframe_min": 60,
-    "max_drawdown_pct": -11.419113038594276,
-    "trades": 72,
-    "total_return_pct": 97.38364537153248,
+    "max_drawdown_pct": -11.858234507713695,
+    "trades": 83,
+    "total_return_pct": 108.37256143455392,
     "days_back": 1095,
     "figi": "BBG004730N88",
-    "timestamp_utc": "20260220T164318Z",
-    "run_id": "20260220T164318Z"
+    "timestamp_utc": "20260220T164446Z",
+    "run_id": "20260220T164446Z"
   },
   {
     "place": 3,
