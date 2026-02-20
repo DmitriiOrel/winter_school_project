@@ -1,5 +1,19 @@
 [
   {
+    "run_id": "20260220T164719Z",
+    "trial_path": "reports/gav/trial_20260220T164719Z",
+    "annual_return_pct": 38.01442884178607,
+    "max_drawdown_pct": -11.975553401149652,
+    "total_return_pct": 162.71577922748602,
+    "trades": 80,
+    "ema_fast": 29,
+    "ema_slow": 40,
+    "bb_window": 20,
+    "bb_dev": 1.0,
+    "timeframe_min": 60,
+    "timestamp_utc": "20260220T164719Z"
+  },
+  {
     "run_id": "20260220T164234Z",
     "trial_path": "reports/gav/trial_20260220T164234Z",
     "annual_return_pct": 18.16290642903087,
