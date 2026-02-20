@@ -1,0 +1,30 @@
+{
+  "run_id": "20260220T163845Z",
+  "name": "dstarky",
+  "figi": "BBG004730N88",
+  "days_back": 1095,
+  "timeframe_min": 60,
+  "ema_fast": 12,
+  "ema_slow": 50,
+  "bb_window": 20,
+  "bb_dev": 2.0,
+  "annual_return_pct": 20.53325959128074,
+  "total_return_pct": 75.04679366869856,
+  "max_drawdown_pct": -22.3766410740765,
+  "trades": 48,
+  "win_rate_pct": 52.083333333333336,
+  "strategy_params": {
+    "ema_fast": 12,
+    "ema_slow": 50,
+    "bb_window": 20,
+    "bb_dev": 2.0,
+    "timeframe_min": 60,
+    "backcandles": 15
+  },
+  "trial_dir": "reports/dstarky/trial_20260220T163845Z",
+  "plot_png": "reports/dstarky/trial_20260220T163845Z/backtest.png",
+  "plot_indicators_1m_png": "reports/dstarky/trial_20260220T163845Z/backtest_indicators_1m.png",
+  "latest_full_3y_png": "reports/scalpel_backtest_full_3y.png",
+  "latest_indicators_1m_png": "reports/scalpel_backtest_indicators_1m.png",
+  "trades_csv": "reports/dstarky/trial_20260220T163845Z/trades.csv"
+}
