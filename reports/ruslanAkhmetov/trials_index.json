@@ -1,0 +1,16 @@
+[
+  {
+    "run_id": "20260220T164422Z",
+    "trial_path": "reports/ruslanAkhmetov/trial_20260220T164422Z",
+    "annual_return_pct": 5.931908747395864,
+    "max_drawdown_pct": -19.47499373914988,
+    "total_return_pct": 18.858160186423902,
+    "trades": 22,
+    "ema_fast": 25,
+    "ema_slow": 50,
+    "bb_window": 20,
+    "bb_dev": 1.0,
+    "timeframe_min": 240,
+    "timestamp_utc": "20260220T164422Z"
+  }
+]
