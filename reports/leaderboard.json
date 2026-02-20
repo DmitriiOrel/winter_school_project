@@ -18,6 +18,23 @@
   },
   {
     "place": 2,
+    "name": "dstarky",
+    "annual_return_pct": 20.53325959128074,
+    "ema_fast": 12,
+    "ema_slow": 50,
+    "bb_window": 20,
+    "bb_dev": 2.0,
+    "timeframe_min": 60,
+    "max_drawdown_pct": -22.3766410740765,
+    "trades": 48,
+    "total_return_pct": 75.04679366869856,
+    "days_back": 1095,
+    "figi": "BBG004730N88",
+    "timestamp_utc": "20260220T163845Z",
+    "run_id": "20260220T163845Z"
+  },
+  {
+    "place": 3,
     "name": "mary",
     "annual_return_pct": 7.2550877451386775,
     "ema_fast": 25,
