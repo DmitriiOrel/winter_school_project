@@ -1,0 +1,27 @@
+{
+  "run_id": "20260220T164454Z",
+  "name": "sam",
+  "figi": "BBG004730N88",
+  "days_back": 1095,
+  "timeframe_min": 240,
+  "ema_fast": 30,
+  "ema_slow": 50,
+  "bb_window": 20,
+  "bb_dev": 1.0,
+  "annual_return_pct": 7.29337316548988,
+  "total_return_pct": 23.496861135735546,
+  "max_drawdown_pct": -18.826730485836784,
+  "trades": 21,
+  "win_rate_pct": 61.904761904761905,
+  "strategy_params": {
+    "ema_fast": 30,
+    "ema_slow": 50,
+    "bb_window": 20,
+    "bb_dev": 1.0,
+    "timeframe_min": 240,
+    "backcandles": 15
+  },
+  "trial_dir": "reports\\sam\\trial_20260220T164454Z",
+  "plot_png": "reports\\sam\\trial_20260220T164454Z\\backtest.png",
+  "trades_csv": "reports\\sam\\trial_20260220T164454Z\\trades.csv"
+}
