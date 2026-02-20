@@ -1,5 +1,19 @@
 [
   {
+    "run_id": "20260220T164446Z",
+    "trial_path": "reports/julia/trial_20260220T164446Z",
+    "annual_return_pct": 27.747665199468695,
+    "max_drawdown_pct": -11.858234507713695,
+    "total_return_pct": 108.37256143455392,
+    "trades": 83,
+    "ema_fast": 30,
+    "ema_slow": 35,
+    "bb_window": 30,
+    "bb_dev": 1.0,
+    "timeframe_min": 60,
+    "timestamp_utc": "20260220T164446Z"
+  },
+  {
     "run_id": "20260220T164318Z",
     "trial_path": "reports/julia/trial_20260220T164318Z",
     "annual_return_pct": 25.459767332286365,
