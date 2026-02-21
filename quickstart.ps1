@@ -37,12 +37,28 @@ function Clear-NetworkEnv {
     }
 }
 
+function Get-TokenFromEnvFile {
+    if (-not (Test-Path ".env")) {
+        return ""
+    }
+    $line = Get-Content ".env" | Where-Object { $_ -like "TOKEN=*" } | Select-Object -First 1
+    if (-not $line) {
+        return ""
+    }
+    return ($line -replace "^TOKEN=", "").Trim()
+}
+
+if ([string]::IsNullOrWhiteSpace($Token)) {
+    $Token = Get-TokenFromEnvFile
+}
+
 if ([string]::IsNullOrWhiteSpace($Token)) {
     $Token = Read-Host "Enter T-Invest API token (starts with t.)"
 }
 if ([string]::IsNullOrWhiteSpace($Token)) {
     throw "Token is empty. Run again with -Token."
 }
+
 $Token = $Token.Trim()
 if ($Token.StartsWith("<") -and $Token.EndsWith(">")) {
     $Token = $Token.Substring(1, $Token.Length - 2).Trim()
@@ -85,17 +101,20 @@ Invoke-External -Executable $pythonExe -Arguments @(
     "--index-url", "https://pypi.org/simple",
     "pip", "setuptools", "wheel"
 ) -StepName "Upgrade pip tooling"
+
 Invoke-External -Executable $pythonExe -Arguments @(
     "-m", "pip", "install",
     "--index-url", "https://pypi.org/simple",
-    "-r", "requirements.txt"
-) -StepName "Install project dependencies"
+    "cachetools", "grpcio", "protobuf", "python-dateutil", "deprecation"
+) -StepName "Install minimal T-Invest dependencies"
+
 Invoke-External -Executable $pythonExe -Arguments @(
     "-m", "pip", "install",
     "--index-url", "https://pypi.org/simple",
     "--no-deps",
     "git+https://github.com/RussianInvestments/invest-python.git@0.2.0-beta97"
 ) -StepName "Install T-Invest SDK"
+
 Invoke-External -Executable $pythonExe -Arguments @("-c", "import tinkoff.invest") -StepName "Validate tinkoff SDK import"
 
 if (-not (Test-Path ".env")) {
@@ -107,7 +126,7 @@ $env:PYTHONPATH = "."
 $env:PYTHONDONTWRITEBYTECODE = "1"
 Clear-NetworkEnv
 
-@'
+@"
 import os
 from pathlib import Path
 
@@ -118,12 +137,16 @@ token = os.environ["SETUP_TOKEN"].strip()
 if not token:
     raise ValueError("Token is empty")
 
-with Client(token, target=INVEST_GRPC_API_SANDBOX) as client:
-    accounts = client.users.get_accounts().accounts
-    if not accounts:
-        client.sandbox.open_sandbox_account()
+try:
+    with Client(token, target=INVEST_GRPC_API_SANDBOX) as client:
         accounts = client.users.get_accounts().accounts
-    account_id = accounts[0].id
+        if not accounts:
+            client.sandbox.open_sandbox_account()
+            accounts = client.users.get_accounts().accounts
+        account_id = accounts[0].id
+except Exception as e:
+    print(f"TOKEN_VALIDATION_ERROR: {type(e).__name__}: {e}")
+    raise SystemExit(2)
 
 env_path = Path(".env")
 env_path.write_text(
@@ -132,21 +155,24 @@ env_path.write_text(
 )
 
 print(account_id)
-'@ | & $pythonExe -
+"@ | & $pythonExe -
+
 if ($LASTEXITCODE -ne 0) {
-    throw "Sandbox account bootstrap failed."
+    throw "Sandbox auth failed. Token is invalid/expired for sandbox. Use another token (for example your working token C)."
 }
+
+Invoke-External -Executable $pythonExe -Arguments @(
+    "-m", "pip", "install",
+    "--index-url", "https://pypi.org/simple",
+    "-r", "requirements.txt"
+) -StepName "Install project dependencies"
 
 Write-Host ""
 Write-Host "Setup complete."
 Write-Host "ACCOUNT_ID written to .env."
 Write-Host "Main run command:"
-Write-Host '$env:GITHUB_TOKEN="github_pat_YOUR_PAT"'
-Write-Host ".\\run_backtest_manual.ps1"
+Write-Host ".\\run_weekly_arima_5d_sandbox.ps1"
 
 if ($Run) {
-    if ([string]::IsNullOrWhiteSpace($env:GITHUB_TOKEN)) {
-        throw "For -Run mode, set GITHUB_TOKEN (GitHub PAT) first."
-    }
-    & ".\\run_backtest_manual.ps1"
+    & ".\\run_weekly_arima_5d_sandbox.ps1"
 }
